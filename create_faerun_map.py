@@ -1,3 +1,4 @@
+import gzip
 import pickle
 from pathlib import Path
 import pandas as pd
@@ -7,18 +8,19 @@ from matplotlib.colors import ListedColormap
 
 
 def main():
-    df = pickle.load(open("all_unmapped_reactions.pkl", "rb"))
+    df = pickle.load(gzip.open("all_unmapped_reactions.pkl.gz", "rb"))
     df = df.astype({"ec1": int, "ec2": int, "ec3": int})
 
     te = tm.embed(
         df.fps,
         layout_generator=tm.layout_generators.AnnoyLayoutGenerator(
-            k=50,
-            kc=50,
+            k=60,
+            kc=60,
             node_size=1 / 65,
             mmm_repeats=1,
             sl_repeats=6,
             sl_extra_scaling_steps=5,
+            n_trees=16
         ),
     )
 
